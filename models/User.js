@@ -6,10 +6,10 @@ const userSchema = new mongoose.Schema({
     email: { type: String, required: true, trim: true, lowercase: true, index: true },
     password: { type: String, required: true, select: false },
 
-    isActive: { type: Boolean, default: false },
+    isActive: { type: Boolean, default: true },
     isEmailVerified: { type: Boolean, default: false },
     avatar: { type: String, default: "" },
-    otp: { type: String, minlength: 6, maxlength: 6, trim: true },
+    otpHash: { type: String, trim: true, select: false },
     otpExpires: Date,
 }, {
     timestamps: true,
@@ -17,10 +17,13 @@ const userSchema = new mongoose.Schema({
 });
 
 // Hash password before saving
-userSchema.pre('save', async function(next) {
-    if(!this.isModified("password")) return;
-    this.password = await bcrypt.hash(this.password, 10);
-    next();
+userSchema.pre('save', async function() {
+    if(this.isModified("password")) {
+        this.password = await bcrypt.hash(this.password, 10);
+    }
+    if(this.isModified("otpHash")) {
+        this.otpHash = await bcrypt.hash(this.otpHash, 10);
+    }
 });
 
 // Compare the user password with the saved password

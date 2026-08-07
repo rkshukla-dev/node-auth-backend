@@ -5,4 +5,9 @@ export const env = {
     port: Number(process.env.PORT || 5001),
     clientUrl: process.env.CLIENT_URL || 'http://localhost:3000',
     mongoUri: process.env.MONGO_URI,
+    smtpHost: process.env.SMTP_HOST,
+    smtpPort: process.env.SMTP_PORT,
+    smtpUser: process.env.SMTP_USER,
+    smptPass: process.env.SMTP_PASS,
+    emailFrom: process.env.EMAIL_FROM,
 }
