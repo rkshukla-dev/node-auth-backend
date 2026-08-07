@@ -25,7 +25,7 @@ export const errorHandler = (err, req, res, next) => {
   };
 
   if (error.details) response.error.details = error.details;
-  if (process.env.NODE_ENV !== 'production') response.error.stack = error.stack;
+  // if (process.env.NODE_ENV !== 'production') response.error.stack = error.stack;
 
   console.error(error);
   res.status(status).json(response);
