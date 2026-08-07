@@ -3,8 +3,9 @@ import cors from "cors";
 import { env } from './config/env.js';
 import helmet from 'helmet';
 import morgan from 'morgan';
+import { errorHandler, notFound } from './middleware/error.js';
 
-const app = express();
+export const app = express();
 app.disable("x-powered-by");    // Hide unnecessary technology information from HTTP responses.
 
 // middleware
@@ -15,5 +16,5 @@ app.use(express.urlencoded({ extended: true }));
 if (env.nodeEnv !== 'test') app.use(morgan('dev'));    // HTTP request logger middleware.
 
 app.get('/health', (req, res) => res.json({ success: true, status: 'ok', timestamp: new Date().toISOString() }));
-
-app.listen(env.port, () => { console.log(`Server running on port ${env.port}`) });
+app.use(notFound);
+app.use(errorHandler);
