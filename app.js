@@ -4,6 +4,7 @@ import { env } from './config/env.js';
 import helmet from 'helmet';
 import morgan from 'morgan';
 import { errorHandler, notFound } from './middleware/error.js';
+import authRoutes from './routes/authRoutes.js';
 
 export const app = express();
 app.disable("x-powered-by");    // Hide unnecessary technology information from HTTP responses.
@@ -16,5 +17,6 @@ app.use(express.urlencoded({ extended: true }));
 if (env.nodeEnv !== 'test') app.use(morgan('dev'));    // HTTP request logger middleware.
 
 app.get('/health', (req, res) => res.json({ success: true, status: 'ok', timestamp: new Date().toISOString() }));
+app.use('/api/v1/auth', authRoutes);
 app.use(notFound);
 app.use(errorHandler);
